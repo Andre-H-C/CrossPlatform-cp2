@@ -6,7 +6,8 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
-  SafeAreaView
+  SafeAreaView,
+  StatusBar
 } from 'react-native';
 
 export default function App() {
@@ -17,21 +18,24 @@ export default function App() {
     if (item.trim() === '') return;
 
     setLista([...lista, { id: Date.now().toString(), nome: item }]);
-    setItem(''); // Limpa o campo de texto
+    setItem('');
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.titulo}>Lista de Compras</Text>
+      <StatusBar barStyle="light-content" backgroundColor="#121212" />
+      
+      <Text style={styles.titulo}>🛒 Lista de Compras</Text>
 
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
           placeholder="Digite um novo item..."
+          placeholderTextColor="#888"
           value={item}
           onChangeText={setItem}
         />
-        <TouchableOpacity style={styles.botao} onPress={adicionarItem}>
+        <TouchableOpacity style={styles.botao} onPress={adicionarItem} activeOpacity={0.8}>
           <Text style={styles.textoBotao}>Adicionar</Text>
         </TouchableOpacity>
       </View>
@@ -39,13 +43,16 @@ export default function App() {
       <FlatList
         data={lista}
         keyExtractor={(item) => item.id}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.flatListContent}
         renderItem={({ item }) => (
           <View style={styles.itemLista}>
+            <View style={styles.pontoLaranja} />
             <Text style={styles.textoItem}>{item.nome}</Text>
           </View>
         )}
         ListEmptyComponent={
-          <Text style={styles.listaVazia}>Nenhum item na lista.</Text>
+          <Text style={styles.listaVazia}>Sua lista está vazia.</Text>
         }
       />
     </SafeAreaView>
@@ -55,58 +62,78 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
-    paddingHorizontal: 20,
-    paddingTop: 50,
+    backgroundColor: '#121212',
+    paddingHorizontal: 24,
+    paddingTop: 60,
   },
   titulo: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 26,
+    fontWeight: '800',
     textAlign: 'center',
-    marginBottom: 20,
-    color: '#333',
+    marginBottom: 24,
+    color: '#FF8C00',
+    letterSpacing: 1,
+    textTransform: 'uppercase',
   },
   inputContainer: {
     flexDirection: 'row',
-    marginBottom: 20,
+    marginBottom: 24,
+    gap: 10,
   },
   input: {
     flex: 1,
-    backgroundColor: '#fff',
+    height: 50,
+    backgroundColor: '#1E1E1E',
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    borderColor: '#333',
+    borderRadius: 12,
+    paddingHorizontal: 16,
     fontSize: 16,
+    color: '#FFF',
   },
   botao: {
-    backgroundColor: '#007AFF',
+    height: 50,
+    backgroundColor: '#FF8C00',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    marginLeft: 10,
-    borderRadius: 8,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    elevation: 3,
   },
   textoBotao: {
-    color: '#fff',
+    color: '#FFF',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 15,
+  },
+  flatListContent: {
+    paddingBottom: 30,
   },
   itemLista: {
-    backgroundColor: '#fff',
-    padding: 15,
-    borderRadius: 8,
-    marginBottom: 10,
+    backgroundColor: '#1E1E1E',
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#eee',
+    borderColor: '#2A2A2A',
+  },
+  pontoLaranja: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#FF8C00',
+    marginRight: 12,
   },
   textoItem: {
     fontSize: 16,
+    color: '#E0E0E0',
+    fontWeight: '500',
   },
   listaVazia: {
     textAlign: 'center',
-    color: '#888',
-    marginTop: 20,
+    color: '#666',
+    marginTop: 30,
+    fontSize: 15,
   },
 });
